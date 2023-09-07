@@ -23,24 +23,28 @@ states = state_data["state"].to_list()
 
 score = 0
 
+game_on = True
+
 answer_state = screen.textinput(title="Guess the State", prompt="What's another state name?").title()
 
-# print(answer_state in states)
-print(state_data[state_data["state"] == answer_state])
+while game_on:
 
-if answer_state in states:
-    guessed_states.append(answer_state)
-    state_pos = state_data[state_data["state"] == answer_state]
-    x_pos = int(state_pos.x)
-    y_pos = int(state_pos.y)
-    # print(x_pos)
-    state_title = turtle.Turtle()
-    state_title.hideturtle()
-    state_title.penup()
-    state_title.goto(x_pos, y_pos)
-    state_title.write(f"{answer_state}", align="center", font=FONT)
+    # print(answer_state in states)
+    # print(state_data[state_data["state"] == answer_state])
 
+    if answer_state in states:
+        guessed_states.append(answer_state)
+        state_pos = state_data[state_data["state"] == answer_state]
+        x_pos = int(state_pos.x)
+        y_pos = int(state_pos.y)
+        # print(x_pos)
+        state_title = turtle.Turtle()
+        state_title.hideturtle()
+        state_title.penup()
+        state_title.goto(x_pos, y_pos)
+        state_title.write(f"{answer_state}", align="center", font=FONT)
 
-
+    answer_state = screen.textinput(title=f"Score {len(guessed_states)}/50",
+                                    prompt="What's another state name?").title()
 
 turtle.mainloop()
