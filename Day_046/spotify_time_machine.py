@@ -15,6 +15,8 @@ SPOTIPY_USER_ID = os.getenv("SPOTIPY_USER_ID")
 
 # year_select = input("What date would you like to travel to (YYY-MM-DD)?: ")
 year_select = "2010-06-15"
+year = year_select[:4]
+print(year)
 
 URL = f"https://www.billboard.com/charts/hot-100/{year_select}/"
 
@@ -34,12 +36,22 @@ for song in song_names_spans:
 
 print(song_titles)
 
-scope = "user-library-read"
+scope = "playlist-modify-private"
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
-results = sp.current_user_saved_tracks()
-for idx, item in enumerate(results['items']):
-    track = item['track']
-    print(idx, track['artists'][0]['name'], " – ", track['name'])
-print(sp.current_user())
+track_uris = []
+
+for title in song_titles:
+    result = sp.search(q=f"track: {title} year:{year}", type="track", limit=1)
+    try:
+        track_uris.append(result["tracks"]["items"][0]["uri"])
+    except IndexError:
+        continue
+
+new_pl = sp.user_playlist_create(user=SPOTIPY_USER_ID, name=f"{year_select} Billboard 100", public=False,
+                                 collaborative=False, description=f"The Billboard Top 100 for the date {year_select}.")
+
+new_pl_id = new_pl["id"]
+
+sp.playlist_add_items(playlist_id=new_pl_id, items=track_uris)
