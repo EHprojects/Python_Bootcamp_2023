@@ -1,3 +1,5 @@
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -16,14 +18,18 @@ def send_mail_notif(pdt_title, pdt_price, pdt_url):
     subject = "Amazon Price Alert!"
     message = f"{pdt_title} now {pdt_price}\n{pdt_url}"
 
-    email_content = f"Subject: {subject}\n\n{message}"
+    msg = MIMEMultipart()
+    msg['From'] = EMAIL_ADDR
+    msg['To'] = EMAIL_RECV
+    msg['Subject'] = subject
+
+    # Attach the Unicode message directly
+    msg.attach(MIMEText(message, 'plain', 'utf-8'))
 
     with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
         connection.starttls()
         connection.login(user=EMAIL_ADDR, password=EMAIL_PASS)
-        connection.sendmail(from_addr=EMAIL_ADDR,
-                            to_addrs=EMAIL_RECV,
-                            msg=email_content)
+        connection.sendmail(from_addr=EMAIL_ADDR, to_addrs=EMAIL_RECV, msg=msg.as_string())
 
 
 URL = "https://www.amazon.com/dp/B075CYMYK6"
@@ -39,14 +45,14 @@ azn_resp = azn_req.text
 soup = BeautifulSoup(azn_resp, "lxml")
 
 # product_title = soup.find('span', id='productTitle').getText(strip=True)
-product_title = soup.find('span', id='productTitle').getText()
-product_title = product_title.strip().encode('utf-8')
-print(product_title)
+product_title = soup.find('span', id='productTitle').getText(strip=True)
+# product_title = product_title.encode('utf-8')
+# print(product_title)
 
 price_list = soup.find_all(name="span", class_="a-offscreen")
 azn_new = price_list[1].getText()
 azn_new = float(azn_new.replace('$', ''))
-print(azn_new)
+# print(azn_new)
 
 if azn_new < 120:
     send_mail_notif(product_title, azn_new, URL)
