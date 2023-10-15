@@ -2,6 +2,14 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
+import os
+from dotenv import load_dotenv
+
+load_dotenv("../.idea/.env")
+
+# [Twitter]
+X_LOGIN = os.getenv("X_LOGIN")
+X_PASS = os.getenv("X_PASS")
 
 
 class InternetSpeedTwitterBot:
@@ -38,7 +46,39 @@ class InternetSpeedTwitterBot:
         print(f"Up: {up_speed}")
 
     def tweet_at_provider(self):
-        pass
+        twitter_url = "https://twitter.com/"
+        self.driver.get(twitter_url)
+
+        # Find the span element containing the specific text using XPath and click it
+        btn_signin = self.driver.find_element(By.XPATH, value='//span[contains(text(),"Sign in")]')
+        btn_signin.click()
+
+        # Find the input box using its class attribute and type text into it
+        # user_name = self.driver.find_element('css selector', 'input.r-30o5oe')
+        time.sleep(1)
+        user_name = self.driver.find_element(By.XPATH, value='/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input')
+        user_name.send_keys(X_LOGIN)
+
+        btn_next = self.driver.find_element(By.XPATH, value='/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[6]')
+        btn_next.click()
+
+        time.sleep(1)
+        input_pass = self.driver.find_element(By.XPATH, value='/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input')
+        input_pass.send_keys(X_PASS)
+
+        btn_login = self.driver.find_element(By.XPATH, value='/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div')
+        btn_login.click()
+
+        time.sleep(1)
+        btn_post = self.driver.find_element(By.XPATH, value='/html/body/div[1]/div/div/div[2]/header/div/div/div/div[1]/div[3]/a')
+        btn_post.click()
+
+        time.sleep(1)
+        in_post = self.driver.find_element(By.XPATH, value='/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div/div[3]/div[2]/div[1]/div/div/div/div[1]/div[2]/div/div/div/div/div/div/div[2]/div/div/div/div/label/div[1]/div/div/div/div/div/div[2]/div')
+        in_post.send_keys("This is a test!")
+
+        btn_sendpost = self.driver.find_element(By.XPATH, value='/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div/div[3]/div[2]/div[1]/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]')
+        btn_sendpost.click()
 
 
 bot = InternetSpeedTwitterBot()
