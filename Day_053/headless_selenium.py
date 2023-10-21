@@ -19,6 +19,7 @@ def get_html(url):
     driver.close()
     return html
 
+
 with open("test.html", "wb") as file:
     site_html = get_html("https://www.zillow.com/homedetails/407-N-9th-St-Las-Vegas-NV-89101/7014811_zpid/")
     file.write(site_html)
