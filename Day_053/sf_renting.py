@@ -21,6 +21,8 @@ zillow_head = {
     # "sec-ch-ua": '"Chromium";v="118", "Google Chrome";v="118", "Not=A?Brand";v="99"',
 }
 
+
+
 response = requests.get(url=zillow_url, headers=zillow_head)
 zillow_html = response.text
 
