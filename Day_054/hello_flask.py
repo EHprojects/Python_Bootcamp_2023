@@ -1,4 +1,8 @@
 from flask import Flask
+# from simple_dotenv import GetEnv
+
+# env = GetEnv('ENV_VARIABLE_KEY')
+
 
 app = Flask(__name__)
 
