@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def greet():
-    return ('<h1 style="text-align: left">Guess a number between 0 and 9</h1>'
+    return ('<h1 style="text-align: left">Guess a number between 0 and 9!</h1>'
             '<img src="https://media.giphy.com/media/3o7aCSPqXE5C6T8tBC/giphy.gif" width=400>')
 
 
